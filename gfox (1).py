@@ -3,9 +3,7 @@ import numpy as np
 import time
 
 
-# ─────────────────────────────────────────────
 #  NOISE DETECTION  (image-level, unchanged)
-# ─────────────────────────────────────────────
 
 def detect_noise_type(img_gray):
     """Classify dominant noise type of the whole image."""
@@ -32,9 +30,9 @@ def detect_noise_type(img_gray):
         return "gaussian"
 
 
-# ─────────────────────────────────────────────
+
 #  PIXEL-LEVEL ADAPTIVE ANALYSIS
-# ─────────────────────────────────────────────
+
 
 def compute_pixel_noise_maps(img_gray, patch=7):
     """
@@ -127,9 +125,9 @@ def adaptive_pixel_filter(img_bgr, patch=7):
     return restored.astype(np.uint8), label_map
 
 
-# ─────────────────────────────────────────────
+
 #  IMAGE-LEVEL AUTO DENOISE  (original logic)
-# ─────────────────────────────────────────────
+
 
 def auto_denoise(noisy_bgr):
     gray       = cv2.cvtColor(noisy_bgr, cv2.COLOR_BGR2GRAY)
@@ -151,9 +149,9 @@ def auto_denoise(noisy_bgr):
     return restored, noise_type
 
 
-# ─────────────────────────────────────────────
+
 #  MAIN
-# ─────────────────────────────────────────────
+
 
 if __name__ == "__main__":
     import sys
@@ -195,14 +193,14 @@ if __name__ == "__main__":
     print(f"    Speckle : {n_speckle:>9,}  ({100*n_speckle/total:5.1f}%)")
     print(f"    Gaussian: {n_gauss:>9,}  ({100*n_gauss/total:5.1f}%)")
 
-    # ── 3. Colour-coded label map ────────────────────────────────────
+    # ── 3. Colour-coded label map 
     # 0=clean(black) 1=S&P(red) 2=speckle(green) 3=gaussian(blue)
     colour_map = np.zeros((*label_map.shape, 3), dtype=np.uint8)
     colour_map[label_map == 1] = (0,   0,   255)   # red   – salt-pepper
     colour_map[label_map == 2] = (0,   200, 0  )   # green – speckle
     colour_map[label_map == 3] = (255, 100, 0  )   # blue  – gaussian
 
-    # ── Save outputs ─────────────────────────────────────────────────
+    # ── Save outputs 
     cv2.imwrite("restored_image_level.png",  restored_auto)
     cv2.imwrite("restored_pixel_level.png",  restored_adaptive)
     cv2.imwrite("noise_label_map.png",       colour_map)
@@ -211,7 +209,7 @@ if __name__ == "__main__":
     print("  restored_pixel_level.png  – pixel-by-pixel adaptive result")
     print("  noise_label_map.png       – red=S&P  green=speckle  blue=gaussian")
 
-    # ── Display ──────────────────────────────────────────────────────
+    # ── Display
     cv2.imshow("Noisy (original)",            noisy)
     cv2.imshow("Restored – image-level",      restored_auto)
     cv2.imshow("Restored – pixel adaptive",   restored_adaptive)
