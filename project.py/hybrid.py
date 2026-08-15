@@ -4,9 +4,9 @@ from skimage.metrics import peak_signal_noise_ratio as psnr
 from skimage.metrics import structural_similarity as ssim
 
 
-# -------------------------------------------------
+
 # Add Mixed Noise (Gaussian + Salt & Pepper)
-# -------------------------------------------------
+
 def add_mixed_noise(image, gauss_var=20, sp_amount=0.05):
     noisy = image.astype(np.float32)
 
@@ -29,18 +29,18 @@ def add_mixed_noise(image, gauss_var=20, sp_amount=0.05):
     return np.clip(out, 0, 255).astype(np.uint8)
 
 
-# -------------------------------------------------
+
 # Image Enhancement Factor (IEF)
-# -------------------------------------------------
+
 def compute_IEF(original, noisy, restored):
     num = np.sum((noisy - original) ** 2)
     den = np.sum((restored - original) ** 2)
     return num / den if den != 0 else float('inf')
 
 
-# -------------------------------------------------
+
 # Adaptive Hybrid Filter
-# -------------------------------------------------
+
 def adaptive_hybrid_filter(image, gaussian_ksize=5, median_ksize=3):
     image = image.astype(np.float32)
 
@@ -57,9 +57,9 @@ def adaptive_hybrid_filter(image, gaussian_ksize=5, median_ksize=3):
     return np.clip(hybrid, 0, 255).astype(np.uint8)
 
 
-# -------------------------------------------------
+
 # MAIN
-# -------------------------------------------------
+
 if __name__ == "__main__":
 
     original = cv2.imread("original_image.png", cv2.IMREAD_GRAYSCALE)
